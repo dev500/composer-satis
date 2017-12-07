@@ -1,15 +1,19 @@
-FROM php:7-alpine
+FROM php:7.2-cli-alpine
 
-RUN curl -L https://github.com/just-containers/s6-overlay/releases/download/v1.20.0.0/s6-overlay-amd64.tar.gz \
-    -o /tmp/s6-overlay-amd64.tar.gz \
-  && tar xzf /tmp/s6-overlay-amd64.tar.gz -C / \
-  && rm /tmp/s6-overlay-amd64.tar.gz
 ENTRYPOINT ["/init"]
 
 VOLUME [ "/data" ]
 
+ENV COMPOSER_VERSION=1.5.5
+ENV S6_OVERLAY_VERSION=v1.21.2.1
+
+RUN curl -L https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz \
+    -o /tmp/s6-overlay-amd64.tar.gz \
+  && tar xzf /tmp/s6-overlay-amd64.tar.gz -C / \
+  && rm /tmp/s6-overlay-amd64.tar.gz
+
 RUN php -r "readfile('https://getcomposer.org/installer');" \
-    | php -- --install-dir=/usr/local/bin --filename=composer
+  | php -- --install-dir=/usr/local/bin --filename=composer --version=${COMPOSER_VERSION}
 
 RUN composer create-project composer/satis:dev-master --prefer-dist --no-dev \
   && cd /satis \
