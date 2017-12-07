@@ -11,6 +11,9 @@ build:
   stage: build
   tags:
     - docker
+  except:
+    - master
+    - tags
   script:
     - docker build -t $IMAGE_TAG .
 
@@ -18,10 +21,12 @@ deploy:
   stage: deploy
   tags:
     - docker
-  variables:
-    RELEASE_IMAGE_TAG: $CI_REGISTRY_IMAGE:latest
-  script:
-    - docker tag $IMAGE_TAG $RELEASE_IMAGE_TAG
-    - docker push $RELEASE_IMAGE_TAG
   only:
     - master
+    - tags
+  script:
+    - if [[ "$CI_COMMIT_REF_SLUG" == "master" ]] ; then TAG=latest ; else TAG=$CI_COMMIT_REF_SLUG ; fi
+    - RELEASE_IMAGE_TAG=$CI_REGISTRY_IMAGE:$TAG
+    - docker build -t $IMAGE_TAG .
+    - docker tag $IMAGE_TAG $RELEASE_IMAGE_TAG
+    - docker push $RELEASE_IMAGE_TAG
