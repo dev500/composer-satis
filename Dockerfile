@@ -1,5 +1,7 @@
 FROM php:7.2-cli-alpine
 
+EXPOSE 80
+
 ENTRYPOINT ["/init"]
 
 VOLUME [ "/data" ]
