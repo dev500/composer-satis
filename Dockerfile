@@ -6,8 +6,8 @@ ENTRYPOINT ["/init"]
 
 VOLUME [ "/data" ]
 
-ENV COMPOSER_VERSION=1.5.5
-ENV S6_OVERLAY_VERSION=v1.21.2.1
+ENV COMPOSER_VERSION=1.6.3
+ENV S6_OVERLAY_VERSION=v1.21.2.2
 
 RUN curl -L https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz \
     -o /tmp/s6-overlay-amd64.tar.gz \
