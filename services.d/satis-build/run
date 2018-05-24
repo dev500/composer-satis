@@ -1,4 +1,4 @@
 #!/usr/bin/with-contenv sh
 
-/satis/bin/satis build /satis.json /data
+/root/.composer/vendor/bin/satis build /satis/satis.json /satis/data
 sleep 300 # 5 minutes

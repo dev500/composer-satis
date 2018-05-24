@@ -6,8 +6,9 @@ ENTRYPOINT ["/init"]
 
 VOLUME [ "/data" ]
 
-ENV COMPOSER_VERSION=1.6.3
-ENV S6_OVERLAY_VERSION=v1.21.2.2
+ENV COMPOSER_VERSION=1.6.5
+ENV S6_OVERLAY_VERSION=v1.21.4.0
+ENV SATIS_VERSION=1.0.0
 
 RUN curl -L https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz \
     -o /tmp/s6-overlay-amd64.tar.gz \
@@ -17,9 +18,7 @@ RUN curl -L https://github.com/just-containers/s6-overlay/releases/download/${S6
 RUN php -r "readfile('https://getcomposer.org/installer');" \
   | php -- --install-dir=/usr/local/bin --filename=composer --version=${COMPOSER_VERSION}
 
-RUN composer create-project composer/satis:dev-master --prefer-dist --no-dev \
-  && cd /satis \
-  && composer dump-autoload -o \
+RUN composer global require composer/satis:1.0.0 --prefer-dist \
   && rm -r ~/.composer/cache/*
 
 RUN apk add --no-cache git openssh zlib-dev \
