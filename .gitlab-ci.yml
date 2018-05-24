@@ -28,5 +28,6 @@ deploy:
     - if [[ "$CI_COMMIT_REF_SLUG" == "master" ]] ; then TAG=latest ; else TAG=$CI_COMMIT_REF_SLUG ; fi
     - RELEASE_IMAGE_TAG=$CI_REGISTRY_IMAGE:$TAG
     - docker build --pull -t $IMAGE_TAG .
+    - docker push $IMAGE_TAG
     - docker tag $IMAGE_TAG $RELEASE_IMAGE_TAG
     - docker push $RELEASE_IMAGE_TAG
